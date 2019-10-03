@@ -50,6 +50,14 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  _getUserWeightData() async {
+    var weight = await IosHealthkit.getWeightData;
+    print('Get data result:' + weight);
+    setState(() {
+      _basicHealthString = weight.toString();
+    });
+  }
+
   _requestAppleFIHR() async {
     print("Request start");
     dynamic authorizationResult = await IosHealthkit.requestAuthorization;
@@ -64,43 +72,48 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Column(
-            children: <Widget>[
-              RaisedButton(
-                child: Text('Authorize'),
-                onPressed: () {
-                  print("Authorize");
-                  _requestAppleFIHR();
-                },
-              ),
-              RaisedButton(
-                child: Text('Get records'),
-                onPressed: () {
-                  _getUserMedicalRecords();
-                },
-              ),
-              RaisedButton(
-                child: Text('Get activity'),
-                onPressed: () {
-                  _getUserActivity();
-                },
-              ),
-              RaisedButton(
-                child: Text('Get steps data'),
-                onPressed: () {
-                  _getUserStepsData();
-                },
-              ),
-              RaisedButton(
-                child: Text('Get sleep data'),
-                onPressed: () {
-                  _getUserSleepData();
-                },
-              ),
-              Text('FIHR Data: $_basicHealthString\n'),
-            ],
-          )
-        ),
+            child: Column(
+          children: <Widget>[
+            RaisedButton(
+              child: Text('Authorize'),
+              onPressed: () {
+                print("Authorize");
+                _requestAppleFIHR();
+              },
+            ),
+            RaisedButton(
+              child: Text('Get records'),
+              onPressed: () {
+                _getUserMedicalRecords();
+              },
+            ),
+            RaisedButton(
+              child: Text('Get activity'),
+              onPressed: () {
+                _getUserActivity();
+              },
+            ),
+            RaisedButton(
+              child: Text('Get steps data'),
+              onPressed: () {
+                _getUserStepsData();
+              },
+            ),
+            RaisedButton(
+              child: Text('Get sleep data'),
+              onPressed: () {
+                _getUserSleepData();
+              },
+            ),
+            RaisedButton(
+              child: Text('Get weight data'),
+              onPressed: () {
+                _getUserWeightData();
+              },
+            ),
+            Text('FIHR Data: $_basicHealthString\n'),
+          ],
+        )),
       ),
     );
   }
