@@ -67,7 +67,74 @@ public class SwiftIosHealthkitPlugin: NSObject, FlutterPlugin {
         print("getSleepData")
         self.getSleepData(result: result)
     }
+    
+    if call.method == "getWeightData" {
+        print("getWeightData")
+        self.getWeightData(result: result)
+    }
   }
+    
+    func getWeightData(result: @escaping FlutterResult) {
+        let bodyMassSample = HKObjectType.quantityType(forIdentifier: .bodyMass)
+        let calendar = Calendar.autoupdatingCurrent
+        let dayComp = DateComponents(month: -3)
+        let startDate = Calendar.current.date(byAdding: dayComp, to: Date())
+        var startDateComponents = calendar.dateComponents(
+            [ .year, .month, .day ],
+            from: startDate!
+        )
+        var endDateComponents = calendar.dateComponents(
+            [ .year, .month, .day ],
+            from: Date()
+        )
+        // This line is required to make the whole thing work
+        startDateComponents.calendar = calendar
+        endDateComponents.calendar = calendar
+        
+        let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: false)
+        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: Date(), options: .strictStartDate)
+        
+        let weightQuery = HKSampleQuery(sampleType: bodyMassSample!, predicate: predicate, limit: 92, sortDescriptors: [sortDescriptor]) { (query, results, error) -> Void in
+            
+            var bodyMassDict: [String: Double] = [String: Double]()
+            
+            if error != nil {
+                print("*** An error occurred: \(error?.localizedDescription ?? "nil") ***")
+                result(nil)
+                return
+            }
+            
+            if let myResults = results {
+                for item in results! {
+                    if let sample = item as? HKQuantitySample {
+                        print(sample as Any)
+                        print(sample.quantity as Any)
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateStyle = .medium
+                        dateFormatter.timeStyle = .none
+                        dateFormatter.dateFormat = "yyyy-MM-dd"
+                        let formattedDate = dateFormatter.string(from: sample.startDate)
+                        let bodyMass = sample.quantity.doubleValue(for: HKUnit.pound())
+                        bodyMassDict[formattedDate] = bodyMass
+                        print(bodyMass as Any)
+                    }
+                }
+                do {
+                    print("Final encoding")
+                    let jsonEncoder = JSONEncoder()
+                    let jsonData = try jsonEncoder.encode(bodyMassDict)
+                    let jsonString = String(data: jsonData, encoding: .utf8)
+                    print(jsonString as Any)
+                    result(jsonString)
+                    return
+                }
+                catch {
+                    print("Json encode error occured.")
+                }
+            }
+        }
+        healthStore.execute(weightQuery)
+    }
     
     func getSleepData(result: @escaping FlutterResult) {
         let sleepSample = HKObjectType.categoryType(forIdentifier: .sleepAnalysis)
@@ -289,7 +356,8 @@ public class SwiftIosHealthkitPlugin: NSObject, FlutterPlugin {
             let vitalSignsType = HKObjectType.clinicalType(forIdentifier: .vitalSignRecord),
             let proceduresType = HKObjectType.clinicalType(forIdentifier: .procedureRecord),
             let stepsCount = HKObjectType.quantityType(forIdentifier: .stepCount),
-            let sleepTime = HKObjectType.categoryType(forIdentifier: .sleepAnalysis)
+            let sleepTime = HKObjectType.categoryType(forIdentifier: .sleepAnalysis),
+            let bodyMass = HKObjectType.quantityType(forIdentifier: .bodyMass)
         else {
             result(nil)
                 fatalError("*** Unable to create the requested types ***")
@@ -301,6 +369,7 @@ public class SwiftIosHealthkitPlugin: NSObject, FlutterPlugin {
             proceduresType,
             stepsCount,
             sleepTime,
+            bodyMass,
             HKObjectType.activitySummaryType()
         ]) { (success, error) in guard success else {
                 // Handle errors here.

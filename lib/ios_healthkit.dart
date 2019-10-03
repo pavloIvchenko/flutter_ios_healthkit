@@ -27,6 +27,10 @@ class IosHealthkit {
     return await _channel.invokeMethod('getSleepData');
   }
 
+  static Future<dynamic> get getWeightData async {
+    return await _channel.invokeMethod('getWeightData');
+  }
+
   static Future<dynamic> get requestAuthorization async {
     print("Call in dart plugin");
     return await _channel.invokeMethod('requestAuthorization');
