@@ -360,7 +360,8 @@ public class SwiftIosHealthkitPlugin: NSObject, FlutterPlugin {
             let bodyMass = HKObjectType.quantityType(forIdentifier: .bodyMass)
         else {
             result(nil)
-                fatalError("*** Unable to create the requested types ***")
+            print("*** Unable to create the requested types ***")
+            return
         }
         healthStore.requestAuthorization(toShare: nil, read: [
             immunizationType,
@@ -374,7 +375,8 @@ public class SwiftIosHealthkitPlugin: NSObject, FlutterPlugin {
         ]) { (success, error) in guard success else {
                 // Handle errors here.
                 result(nil)
-                fatalError("*** An error occurred while requesting authorization: \(error!.localizedDescription) ***")
+                print("*** An error occurred while requesting authorization: \(error!.localizedDescription) ***")
+                return
             }
             result("success")
         }
@@ -391,7 +393,8 @@ public class SwiftIosHealthkitPlugin: NSObject, FlutterPlugin {
             let vitalSignsType = HKObjectType.clinicalType(forIdentifier: .vitalSignRecord)
             else {
                 result(nil)
-                fatalError("*** Unable to create the requested types ***")
+                print("*** Unable to create the requested types ***")
+                return
         }
         
         let objectTypes: [HKObjectType] = [immunizationType, labResultsType, vitalSignsType]
