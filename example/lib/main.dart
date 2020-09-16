@@ -18,49 +18,22 @@ class _MyAppState extends State<MyApp> {
     _requestAppleFIHR();
   }
 
-  _getUserMedicalRecords() async {
-    var basicHealth = await IosHealthkit.getMedicalRecords;
-    print('Get data result:' + basicHealth);
+  _getAllData() async {
+    var categories = ['immunization', 'labResults', 'vitalSigns', 'procedures', 'activityTime', 'steps', 'workouts', 'weight', 'sleepDetails', 'restingEnergy', 'activitySummary'];
+    print(categories);
+    var endDate = new DateTime.now();
+    var startDate =  endDate.subtract(Duration(minutes: 30));
+    var data = await IosHealthkit().getHealthKitData(categories, startDate, endDate);
+    print('Get data result:' + data.toString());
     setState(() {
-      _basicHealthString = basicHealth.toString();
-    });
-  }
-
-  _getUserActivity() async {
-    var activity = await IosHealthkit.getActivityData;
-    print('Get data result:' + activity);
-    setState(() {
-      _basicHealthString = activity.toString();
-    });
-  }
-
-  _getUserStepsData() async {
-    var steps = await IosHealthkit.getStepsData;
-    print('Get data result:' + steps);
-    setState(() {
-      _basicHealthString = steps.toString();
-    });
-  }
-
-  _getUserSleepData() async {
-    var sleep = await IosHealthkit.getSleepData;
-    print('Get data result:' + sleep);
-    setState(() {
-      _basicHealthString = sleep.toString();
-    });
-  }
-
-  _getUserWeightData() async {
-    var weight = await IosHealthkit.getWeightData;
-    print('Get data result:' + weight);
-    setState(() {
-      _basicHealthString = weight.toString();
+    _basicHealthString = data.toString();
     });
   }
 
   _requestAppleFIHR() async {
     print("Request start");
-    dynamic authorizationResult = await IosHealthkit.requestAuthorization;
+    var categories = ['immunization', 'labResults', 'vitalSigns', 'procedures', 'activityTime', 'steps', 'sleep', 'weight', 'workouts', 'heartRate', 'restingHeartRate', 'heartRateVariability', 'walkingHeartRate', 'restingEnergy', 'activitySummary'];
+    dynamic authorizationResult = await IosHealthkit.requestAuthorization(categories);
     print('Authorization result:' + authorizationResult);
   }
 
@@ -71,7 +44,7 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(
+        body: SingleChildScrollView(
             child: Column(
           children: <Widget>[
             RaisedButton(
@@ -82,33 +55,9 @@ class _MyAppState extends State<MyApp> {
               },
             ),
             RaisedButton(
-              child: Text('Get records'),
+              child: Text('Get all data'),
               onPressed: () {
-                _getUserMedicalRecords();
-              },
-            ),
-            RaisedButton(
-              child: Text('Get activity'),
-              onPressed: () {
-                _getUserActivity();
-              },
-            ),
-            RaisedButton(
-              child: Text('Get steps data'),
-              onPressed: () {
-                _getUserStepsData();
-              },
-            ),
-            RaisedButton(
-              child: Text('Get sleep data'),
-              onPressed: () {
-                _getUserSleepData();
-              },
-            ),
-            RaisedButton(
-              child: Text('Get weight data'),
-              onPressed: () {
-                _getUserWeightData();
+                _getAllData();
               },
             ),
             Text('FIHR Data: $_basicHealthString\n'),
