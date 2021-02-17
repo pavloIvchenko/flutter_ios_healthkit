@@ -19,7 +19,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   _getAllData() async {
-    var categories = ['immunization', 'labResults', 'vitalSigns', 'procedures', 'activityTime', 'steps', 'workouts', 'weight', 'sleepDetails', 'restingEnergy', 'activitySummary'];
+    var categories = ['immunization', 'labResults', 'vitalSigns', 'procedures', 'activity', 'steps', 'workouts', 'weight', 'sleepDetails', 'restingEnergy', 'activitySummary'];
     print(categories);
     var endDate = new DateTime.now();
     var startDate =  endDate.subtract(Duration(minutes: 30));
@@ -32,7 +32,7 @@ class _MyAppState extends State<MyApp> {
 
   _requestAppleFIHR() async {
     print("Request start");
-    var categories = ['immunization', 'labResults', 'vitalSigns', 'procedures', 'activityTime', 'steps', 'sleep', 'weight', 'workouts', 'heartRate', 'restingHeartRate', 'heartRateVariability', 'walkingHeartRate', 'restingEnergy', 'activitySummary'];
+    var categories = ['immunization', 'labResults', 'vitalSigns', 'procedures', 'activity', 'steps', 'sleep', 'weight', 'workouts', 'heartRate', 'restingHeartRate', 'heartRateVariability', 'walkingHeartRate', 'restingEnergy', 'activitySummary'];
     dynamic authorizationResult = await IosHealthkit.requestAuthorization(categories);
     print('Authorization result:' + authorizationResult);
   }

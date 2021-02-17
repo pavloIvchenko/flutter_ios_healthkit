@@ -515,6 +515,9 @@ public class SwiftIosHealthkitPlugin: NSObject, FlutterPlugin {
             if results != nil {
                 for item in results! {
                     if let sample = item as? HKCategorySample {
+                        if (self.getSleepSampleType(sampleValue: sample.value) != "asleep") {
+                            continue;
+                        }
                         let dateFormatter = DateFormatter()
                         dateFormatter.dateStyle = .medium
                         dateFormatter.timeStyle = .none
@@ -988,7 +991,7 @@ public class SwiftIosHealthkitPlugin: NSObject, FlutterPlugin {
         dataTypes["weight"] = bodyMass
         dataTypes["restingEnergy"] = restingEnergy
         dataTypes["heartRate"] = heartRate
-        dataTypes["activityTime"] = HKObjectType.activitySummaryType()
+        dataTypes["activity"] = HKObjectType.activitySummaryType()
         dataTypes["activitySummary"] = HKObjectType.activitySummaryType()
         dataTypes["workouts"] = HKObjectType.workoutType()
         

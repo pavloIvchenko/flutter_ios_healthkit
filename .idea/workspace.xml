@@ -7,24 +7,12 @@
     <list default="true" id="8c3b1ea4-9c9a-4240-a6c4-e861c2d3cd9e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/ios_healthkit/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/ios_healthkit/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/ios_healthkit/example/ios/Flutter/flutter_export_environment.sh" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/ios_healthkit/example/ios/Flutter/flutter_export_environment.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/ios_healthkit/example/ios/Podfile" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/ios_healthkit/example/ios/Podfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/ios_healthkit/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/ios_healthkit/example/ios/Podfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/ios_healthkit/example/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/ios_healthkit/example/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/ios_healthkit/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/ios_healthkit/example/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/ios_healthkit/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/ios_healthkit/example/pubspec.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/ios_healthkit/ios/Classes/SwiftIosHealthkitPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/ios_healthkit/ios/Classes/SwiftIosHealthkitPlugin.swift" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/ios_healthkit/lib/ios_healthkit.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/ios_healthkit/lib/ios_healthkit.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/ios_healthkit/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/ios_healthkit/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Flutter/flutter_export_environment.sh" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Flutter/flutter_export_environment.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Podfile" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Podfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Podfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ios/Classes/SwiftIosHealthkitPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/SwiftIosHealthkitPlugin.swift" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/ios_healthkit.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ios_healthkit.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,6 +66,29 @@
       <are-packages-shown value="true" />
       <is-autoscroll-to-source value="true" />
     </todo-panel>
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1398" height="168" key="GridCell.Tab.0.bottom" timestamp="1600258338980">
+      <screen x="0" y="23" width="1440" height="823" />
+    </state>
+    <state width="1398" height="168" key="GridCell.Tab.0.bottom/0.23.1440.823@0.23.1440.823" timestamp="1600258338980" />
+    <state width="1398" height="168" key="GridCell.Tab.0.center" timestamp="1600258338979">
+      <screen x="0" y="23" width="1440" height="823" />
+    </state>
+    <state width="1398" height="168" key="GridCell.Tab.0.center/0.23.1440.823@0.23.1440.823" timestamp="1600258338979" />
+    <state width="1398" height="168" key="GridCell.Tab.0.left" timestamp="1600258338979">
+      <screen x="0" y="23" width="1440" height="823" />
+    </state>
+    <state width="1398" height="168" key="GridCell.Tab.0.left/0.23.1440.823@0.23.1440.823" timestamp="1600258338979" />
+    <state width="1398" height="168" key="GridCell.Tab.0.right" timestamp="1600258338980">
+      <screen x="0" y="23" width="1440" height="823" />
+    </state>
+    <state width="1398" height="168" key="GridCell.Tab.0.right/0.23.1440.823@0.23.1440.823" timestamp="1600258338980" />
+    <state x="399" y="266" key="com.intellij.ide.util.TipDialog" timestamp="1601028756411">
+      <screen x="0" y="23" width="1440" height="820" />
+    </state>
+    <state x="399" y="266" key="com.intellij.ide.util.TipDialog/0.23.1440.820@0.23.1440.820" timestamp="1601028756411" />
+    <state x="399" y="267" key="com.intellij.ide.util.TipDialog/0.23.1440.823@0.23.1440.823" timestamp="1600258334141" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

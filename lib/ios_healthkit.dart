@@ -109,7 +109,7 @@ class IosHealthkit {
     for (String category in categories) {
       String data;
       switch (category) {
-        case 'activityTime':
+        case 'activity':
           data = await getActivityTimeData(fourWeeksBeforeStamp, todayStamp);
           print('activityTime: $data');
           break;
