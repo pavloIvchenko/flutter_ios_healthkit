@@ -11,55 +11,59 @@ class IosHealthkit {
     return version;
   }
 
-  static Future<String> getMedicalRecords() async {
+  static Future<String?> getMedicalRecords() async {
     return await _channel.invokeMethod('getMedicalRecords');
   }
 
-  static Future<String> getActivityTimeData(int startTime, int endTime) async {
+  static Future<String?> getActivityTimeData(int startTime, int endTime) async {
     return await _channel.invokeMethod('getActivityTimeData', { 'startTime': startTime, 'endTime': endTime });
   }
 
-  static Future<String> getFullActivityData(int startTime, int endTime) async {
+  static Future<String?> getFullActivityData(int startTime, int endTime) async {
     return await _channel.invokeMethod('getFullActivityData', { 'startTime': startTime, 'endTime': endTime });
   }
 
-  static Future<String> getStepsData(int startTime, int endTime) async {
+  static Future<String?> getStepsData(int startTime, int endTime) async {
     return await _channel.invokeMethod('getStepsData', { 'startTime': startTime, 'endTime': endTime });
   }
 
-  static Future<String> getRestingEnergyData(int startTime, int endTime) async {
+  static Future<String?> getFlightsClimbed(int startTime, int endTime) async {
+    return await _channel.invokeMethod('getFlightsClimbed', { 'startTime': startTime, 'endTime': endTime });
+  }
+
+  static Future<String?> getRestingEnergyData(int startTime, int endTime) async {
     return await _channel.invokeMethod('getRestingEnergyData', { 'startTime': startTime, 'endTime': endTime });
   }
 
-  static Future<String> getSleepData(int startTime, int endTime) async {
+  static Future<String?> getSleepData(int startTime, int endTime) async {
     return await _channel.invokeMethod('getSleepData', { 'startTime': startTime, 'endTime': endTime });
   }
 
-  static Future<String> getSleepDetails(int startTime, int endTime) async {
+  static Future<String?> getSleepDetails(int startTime, int endTime) async {
     return await _channel.invokeMethod('getSleepDetails', { 'startTime': startTime, 'endTime': endTime });
   }
 
-  static Future<String> getWeightData(int startTime, int endTime) async {
+  static Future<String?> getWeightData(int startTime, int endTime) async {
     return await _channel.invokeMethod('getWeightData', { 'startTime': startTime, 'endTime': endTime });
   }
 
-  static Future<String> getWorkoutsData(int startTime, int endTime) async {
+  static Future<String?> getWorkoutsData(int startTime, int endTime) async {
     return await _channel.invokeMethod('getWorkoutsData', { 'startTime': startTime, 'endTime': endTime });
   }
 
-  static Future<String> getHeartRateData(int startTime, int endTime) async {
+  static Future<String?> getHeartRateData(int startTime, int endTime) async {
     return await _channel.invokeMethod('getHeartRateData', { 'startTime': startTime, 'endTime': endTime });
   }
 
-  static Future<String> getWalkingHeartRateData(int startTime, int endTime) async {
+  static Future<String?> getWalkingHeartRateData(int startTime, int endTime) async {
     return await _channel.invokeMethod('getWalkingHeartRateData', { 'startTime': startTime, 'endTime': endTime });
   }
 
-  static Future<String> getHeartRateVariability(int startTime, int endTime) async {
+  static Future<String?> getHeartRateVariability(int startTime, int endTime) async {
     return await _channel.invokeMethod('getHeartRateVariability', { 'startTime': startTime, 'endTime': endTime });
   }
 
-  static Future<String> getRestingHeartRateData(int startTime, int endTime) async {
+  static Future<String?> getRestingHeartRateData(int startTime, int endTime) async {
     return await _channel.invokeMethod('getRestingHeartRateData', { 'startTime': startTime, 'endTime': endTime });
   }
 
@@ -107,7 +111,7 @@ class IosHealthkit {
   retrieveDataByCategory(int weekStartStamp, int weekEndStamp, int fourWeeksBeforeStamp, int todayStamp, List<String> categories) async {
     Map collectedData = {};
     for (String category in categories) {
-      String data;
+      String? data;
       switch (category) {
         case 'activity':
           data = await getActivityTimeData(fourWeeksBeforeStamp, todayStamp);
@@ -119,6 +123,10 @@ class IosHealthkit {
           break;
         case 'steps':
           data = await getStepsData(fourWeeksBeforeStamp, todayStamp);
+          print('steps: $data');
+          break;
+        case 'flightsClimbed':
+          data = await getFlightsClimbed(fourWeeksBeforeStamp, todayStamp);
           print('steps: $data');
           break;
         case 'restingEnergy':

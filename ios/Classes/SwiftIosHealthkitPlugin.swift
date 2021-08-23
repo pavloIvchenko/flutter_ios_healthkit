@@ -242,6 +242,17 @@ public class SwiftIosHealthkitPlugin: NSObject, FlutterPlugin {
         self.getStepsData(result: result, startDate: args["startTime"]!, endDate: args["endTime"]!)
     }
     
+    if call.method == "getFlightsClimbed" {
+        guard let args = call.arguments as? [String: Int] else {
+            result("iOS could not recognize flutter arguments in method: (getFlightsClimbed)")
+            return
+        }
+        
+        print(args)
+        print("getFlightsClimbed")
+        self.getStepsData(result: result, startDate: args["startTime"]!, endDate: args["endTime"]!)
+    }
+    
     if call.method == "getRestingEnergyData" {
         guard let args = call.arguments as? [String: Int] else {
             result("iOS could not recognize flutter arguments in method: (getRestingEnergyData)")
@@ -660,7 +671,11 @@ public class SwiftIosHealthkitPlugin: NSObject, FlutterPlugin {
 
             query.initialResultsHandler = { query, results, error in
                 
-            print(results!)
+            if results != nil {
+              print(results)
+            } else {
+              print("No resting energy data")
+            }
                 
             var keys: [String] = [String]()
             var values: [Double]  = [Double]()
@@ -734,9 +749,13 @@ public class SwiftIosHealthkitPlugin: NSObject, FlutterPlugin {
         let query = HKStatisticsCollectionQuery(quantityType: stepsCount!, quantitySamplePredicate: predicate, options: [.cumulativeSum], anchorDate: startDateConverted, intervalComponents: interval)
 
             query.initialResultsHandler = { query, results, error in
-                
-            print(results!)
-                
+
+            if results != nil {
+              print(results)
+            } else {
+              print("No steps data")
+            }
+
             var keys: [String] = [String]()
             var values: [Double]  = [Double]()
                 
@@ -771,6 +790,86 @@ public class SwiftIosHealthkitPlugin: NSObject, FlutterPlugin {
                     print("Final encoding")
                     let jsonEncoder = JSONEncoder()
                     let jsonData = try jsonEncoder.encode(stepsMap)
+                    let jsonString = String(data: jsonData, encoding: .utf8)
+                    print(jsonString as Any)
+                    result(jsonString)
+                    return
+                }
+                catch {
+                    print("Json encode error occured.")
+                }
+            }
+        }
+        healthStore.execute(query)
+    }
+    
+    func getFlightsClimbed(result: @escaping FlutterResult, startDate: Int, endDate: Int) {
+        let flightsType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.flightsClimbed)
+        
+        let calendar = Calendar.autoupdatingCurrent
+        let startDateConverted = Date(timeIntervalSince1970: TimeInterval(startDate))
+        let endDateConverted =  Date(timeIntervalSince1970: TimeInterval(endDate))
+        var startDateComponents = calendar.dateComponents(
+            [ .year, .month, .day ],
+            from: startDateConverted
+        )
+        var endDateComponents = calendar.dateComponents(
+            [ .year, .month, .day ],
+            from: endDateConverted
+        )
+
+        // This line is required to make the whole thing work
+        startDateComponents.calendar = calendar
+        endDateComponents.calendar = calendar
+        
+        let predicate = HKQuery.predicateForSamples(withStart: startDateConverted, end: endDateConverted, options: .strictStartDate)
+        var interval = DateComponents()
+        interval.day = 1
+        
+        let query = HKStatisticsCollectionQuery(quantityType: flightsType!, quantitySamplePredicate: predicate, options: [.cumulativeSum], anchorDate: startDateConverted, intervalComponents: interval)
+
+            query.initialResultsHandler = { query, results, error in
+
+            if results != nil {
+              print(results)
+            } else {
+              print("No steps data")
+            }
+
+            var keys: [String] = [String]()
+            var values: [Double]  = [Double]()
+                
+            if error != nil {
+                print("*** An error occurred: \(error?.localizedDescription ?? "nil") ***")
+                result(nil)
+                return
+            }
+                
+            if let myResults = results {
+                myResults.enumerateStatistics(from: startDateConverted, to: endDateConverted) {
+                    statistics, stop in
+                    
+                    if let quantity = statistics.sumQuantity() {
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateStyle = .medium
+                        dateFormatter.timeStyle = .none
+                        dateFormatter.dateFormat = "yyyy-MM-dd"
+                        print("Summary date")
+                        let formattedDate = dateFormatter.string(from: statistics.endDate)
+                        print(formattedDate)
+                        keys.append(formattedDate)
+                        let flightsClimbed = quantity.doubleValue(for: HKUnit.count())
+                        values.append(flightsClimbed)
+                        print("Flights climbed = \(flightsClimbed)")
+                        //completion(stepRetrieved: steps)
+                        
+                    }
+                }
+                do {
+                    let map = Dictionary(uniqueKeysWithValues: zip(keys, values))
+                    print("Final encoding")
+                    let jsonEncoder = JSONEncoder()
+                    let jsonData = try jsonEncoder.encode(map)
                     let jsonString = String(data: jsonData, encoding: .utf8)
                     print(jsonString as Any)
                     result(jsonString)
@@ -975,6 +1074,7 @@ public class SwiftIosHealthkitPlugin: NSObject, FlutterPlugin {
         }
         
         guard let stepsCount = HKObjectType.quantityType(forIdentifier: .stepCount),
+              let flightsClimbed = HKObjectType.quantityType(forIdentifier: .flightsClimbed),
             let sleepTime = HKObjectType.categoryType(forIdentifier: .sleepAnalysis),
             let bodyMass = HKObjectType.quantityType(forIdentifier: .bodyMass),
             let restingEnergy = HKObjectType.quantityType(forIdentifier: .basalEnergyBurned),
@@ -987,6 +1087,7 @@ public class SwiftIosHealthkitPlugin: NSObject, FlutterPlugin {
         
         dataTypes["steps"] = stepsCount
         dataTypes["sleep"] = sleepTime
+        dataTypes["flightsClimbed"] = flightsClimbed
         dataTypes["sleepDetails"] = sleepTime
         dataTypes["weight"] = bodyMass
         dataTypes["restingEnergy"] = restingEnergy
