@@ -250,7 +250,9 @@ public class SwiftIosHealthkitPlugin: NSObject, FlutterPlugin {
         
         print(args)
         print("getFlightsClimbed")
-        self.getStepsData(result: result, startDate: args["startTime"]!, endDate: args["endTime"]!)
+        NSLog("\nHello, World!")
+        os_log("\nos_log!")
+        self.getFlightsClimbed(result: result, startDate: args["startTime"]!, endDate: args["endTime"]!)
     }
     
     if call.method == "getRestingEnergyData" {
@@ -804,6 +806,7 @@ public class SwiftIosHealthkitPlugin: NSObject, FlutterPlugin {
     }
     
     func getFlightsClimbed(result: @escaping FlutterResult, startDate: Int, endDate: Int) {
+        print("flights test")
         let flightsType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.flightsClimbed)
         
         let calendar = Calendar.autoupdatingCurrent
@@ -833,7 +836,7 @@ public class SwiftIosHealthkitPlugin: NSObject, FlutterPlugin {
             if results != nil {
               print(results)
             } else {
-              print("No steps data")
+              print("No flights data")
             }
 
             var keys: [String] = [String]()
