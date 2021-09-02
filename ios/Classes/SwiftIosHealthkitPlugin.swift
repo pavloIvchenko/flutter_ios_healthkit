@@ -242,6 +242,17 @@ public class SwiftIosHealthkitPlugin: NSObject, FlutterPlugin {
         self.getStepsData(result: result, startDate: args["startTime"]!, endDate: args["endTime"]!)
     }
     
+    if call.method == "getDistance" {
+        guard let args = call.arguments as? [String: Int] else {
+            result("iOS could not recognize flutter arguments in method: (getDistance)")
+            return
+        }
+        
+        print(args)
+        print("getDistance")
+        self.getDistance(result: result, startDate: args["startTime"]!, endDate: args["endTime"]!)
+    }
+    
     if call.method == "getFlightsClimbed" {
         guard let args = call.arguments as? [String: Int] else {
             result("iOS could not recognize flutter arguments in method: (getFlightsClimbed)")
@@ -250,8 +261,6 @@ public class SwiftIosHealthkitPlugin: NSObject, FlutterPlugin {
         
         print(args)
         print("getFlightsClimbed")
-        NSLog("\nHello, World!")
-        os_log("\nos_log!")
         self.getFlightsClimbed(result: result, startDate: args["startTime"]!, endDate: args["endTime"]!)
     }
     
@@ -805,6 +814,87 @@ public class SwiftIosHealthkitPlugin: NSObject, FlutterPlugin {
         healthStore.execute(query)
     }
     
+    func getDistance(result: @escaping FlutterResult, startDate: Int, endDate: Int) {
+        print("Get distance")
+        let distance = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.distanceWalkingRunning)
+        
+        let calendar = Calendar.autoupdatingCurrent
+        let startDateConverted = Date(timeIntervalSince1970: TimeInterval(startDate))
+        let endDateConverted =  Date(timeIntervalSince1970: TimeInterval(endDate))
+        var startDateComponents = calendar.dateComponents(
+            [ .year, .month, .day ],
+            from: startDateConverted
+        )
+        var endDateComponents = calendar.dateComponents(
+            [ .year, .month, .day ],
+            from: endDateConverted
+        )
+
+        // This line is required to make the whole thing work
+        startDateComponents.calendar = calendar
+        endDateComponents.calendar = calendar
+        
+        let predicate = HKQuery.predicateForSamples(withStart: startDateConverted, end: endDateConverted, options: .strictStartDate)
+        var interval = DateComponents()
+        interval.day = 1
+        
+        let query = HKStatisticsCollectionQuery(quantityType: distance!, quantitySamplePredicate: predicate, options: [.cumulativeSum], anchorDate: startDateConverted, intervalComponents: interval)
+
+            query.initialResultsHandler = { query, results, error in
+
+            if results != nil {
+              print(results)
+            } else {
+              print("No distance data")
+            }
+
+            var keys: [String] = [String]()
+            var values: [Double]  = [Double]()
+                
+            if error != nil {
+                print("*** An error occurred: \(error?.localizedDescription ?? "nil") ***")
+                result(nil)
+                return
+            }
+                
+            if let myResults = results {
+                myResults.enumerateStatistics(from: startDateConverted, to: endDateConverted) {
+                    statistics, stop in
+                    
+                    if let quantity = statistics.sumQuantity() {
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateStyle = .medium
+                        dateFormatter.timeStyle = .none
+                        dateFormatter.dateFormat = "yyyy-MM-dd"
+                        print("Summary date")
+                        let formattedDate = dateFormatter.string(from: statistics.endDate)
+                        print(formattedDate)
+                        keys.append(formattedDate)
+                        let distance = quantity.doubleValue(for: HKUnit.meter())
+                        values.append(distance)
+                        print("Distance = \(distance)")
+                        //completion(stepRetrieved: steps)
+                        
+                    }
+                }
+                do {
+                    let stepsMap = Dictionary(uniqueKeysWithValues: zip(keys, values))
+                    print("Final encoding")
+                    let jsonEncoder = JSONEncoder()
+                    let jsonData = try jsonEncoder.encode(stepsMap)
+                    let jsonString = String(data: jsonData, encoding: .utf8)
+                    print(jsonString as Any)
+                    result(jsonString)
+                    return
+                }
+                catch {
+                    print("Json encode error occured.")
+                }
+            }
+        }
+        healthStore.execute(query)
+    }
+    
     func getFlightsClimbed(result: @escaping FlutterResult, startDate: Int, endDate: Int) {
         print("flights test")
         let flightsType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.flightsClimbed)
@@ -864,7 +954,6 @@ public class SwiftIosHealthkitPlugin: NSObject, FlutterPlugin {
                         let flightsClimbed = quantity.doubleValue(for: HKUnit.count())
                         values.append(flightsClimbed)
                         print("Flights climbed = \(flightsClimbed)")
-                        //completion(stepRetrieved: steps)
                         
                     }
                 }
@@ -1077,6 +1166,7 @@ public class SwiftIosHealthkitPlugin: NSObject, FlutterPlugin {
         }
         
         guard let stepsCount = HKObjectType.quantityType(forIdentifier: .stepCount),
+              let distance = HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning),
               let flightsClimbed = HKObjectType.quantityType(forIdentifier: .flightsClimbed),
             let sleepTime = HKObjectType.categoryType(forIdentifier: .sleepAnalysis),
             let bodyMass = HKObjectType.quantityType(forIdentifier: .bodyMass),
@@ -1089,6 +1179,7 @@ public class SwiftIosHealthkitPlugin: NSObject, FlutterPlugin {
             }
         
         dataTypes["steps"] = stepsCount
+        dataTypes["distance"] = distance
         dataTypes["sleep"] = sleepTime
         dataTypes["flightsClimbed"] = flightsClimbed
         dataTypes["sleepDetails"] = sleepTime

@@ -27,6 +27,10 @@ class IosHealthkit {
     return await _channel.invokeMethod('getStepsData', { 'startTime': startTime, 'endTime': endTime });
   }
 
+  static Future<String?> getDistance(int startTime, int endTime) async {
+    return await _channel.invokeMethod('getDistance', { 'startTime': startTime, 'endTime': endTime });
+  }
+
   static Future<String?> getFlightsClimbed(int startTime, int endTime) async {
     return await _channel.invokeMethod('getFlightsClimbed', { 'startTime': startTime, 'endTime': endTime });
   }
@@ -125,9 +129,13 @@ class IosHealthkit {
           data = await getStepsData(fourWeeksBeforeStamp, todayStamp);
           print('steps: $data');
           break;
+        case 'distance':
+          data = await getDistance(fourWeeksBeforeStamp, todayStamp);
+          print('distance: $data');
+          break;
         case 'flightsClimbed':
           data = await getFlightsClimbed(fourWeeksBeforeStamp, todayStamp);
-          print('steps: $data');
+          print('flightsClimbed: $data');
           break;
         case 'restingEnergy':
           data = await getRestingEnergyData(fourWeeksBeforeStamp, todayStamp);
