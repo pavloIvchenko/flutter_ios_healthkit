@@ -1006,7 +1006,7 @@ public class SwiftIosHealthkitPlugin: NSObject, FlutterPlugin {
             }
             
             // Handle the activity rings data here
-            let exerciseUnit = HKUnit.minute()
+            let exerciseUnit = HKUnit.second()
             
             print(summaries.count)
             
